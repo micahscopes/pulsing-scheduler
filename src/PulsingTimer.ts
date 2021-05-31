@@ -1,23 +1,25 @@
 import { Disposable, Handle, Timer } from '@most/types'
 
-import { Arity1, VirtualTimeline } from './internal'
-import { createVirtualClock, VirtualClock } from './VirtualClock'
+import { Arity1, PulsingTimeline } from './internal'
+import { createPulsingClock, PulsingClock } from './PulsingClock'
 
 /**
- * A VirtualTimer is an extension of @most/core's built-in Timer, but when progressing time
+ * A PulsingTimer is an extension of @most/core's built-in Timer, but when progressing time
  * it will run any tasks at or before the time progressed to. It implements a Disposable instance
  * in the event you would like to remove all tasks previously scheduled.
  */
-export interface VirtualTimer extends Timer, VirtualClock, Disposable {}
+export interface PulsingTimer extends Timer, PulsingClock, Disposable {}
 
-export function createVirtualTimer(clock: VirtualClock = createVirtualClock()): VirtualTimer {
-  const timeline = new VirtualTimeline()
+export function createPulsingTimer(
+  clock: PulsingClock = createPulsingClock(),
+  defaultDuration: number = 1,
+): PulsingTimer {
+  const timeline = new PulsingTimeline()
 
-  function delay(delayMS: number, f: Arity1<number, any>): Disposable {
-    const time = clock.now() + delayMS
+  function delay(delayPulsings: number, f: Arity1<number, any>): Disposable {
+    const time = clock.now() + delayPulsings
 
     timeline.addTask(time, f)
-
     return { dispose: () => timeline.removeTask(time, f) }
   }
 
@@ -31,12 +33,12 @@ export function createVirtualTimer(clock: VirtualClock = createVirtualClock()): 
   let id = 0
   const disposables = new Map<Handle, Disposable>()
 
-  function setTimer(f: () => void, delayMS: number): Handle {
+  function setTimer(f: () => void, delayPulsings: number): Handle {
     const handle = id++
 
     disposables.set(
       handle,
-      delay(delayMS, () => {
+      delay(delayPulsings, () => {
         disposables.delete(handle)
         f()
       }),
@@ -59,8 +61,8 @@ export function createVirtualTimer(clock: VirtualClock = createVirtualClock()): 
     setTimer,
     clearTimer,
     dispose,
-    progressTimeBy: (elapsed) => {
-      const time = clock.progressTimeBy(elapsed)
+    pulse: (duration: number = defaultDuration) => {
+      const time = clock.pulse(duration)
 
       runTasks()
 

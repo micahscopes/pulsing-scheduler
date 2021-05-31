@@ -1,34 +1,32 @@
-# most-virtual-scheduler
+# most-pulsing-scheduler
 
-This package is home to an alternative [`Clock`]() and [`Timer`]() implementation that use "virtual"
-time to progress `@most/core`s `Scheduler` forward imperatively and with precise control. This is 
-designed for testing scenarios, where real asynchrony is either too slow or hard to test.
+This package is a fork of @TylorS's excellent `most-virtual-scheduler`, with music and multimedia applications in mind.
 
-## Install
+This package provides [`Clock`]() and [`Timer`]() implementations that allow time to manually "pulsed" to progress through `@most/core`s `Scheduler` events dynamically and precisely.
 
-```sh
+## Install 
+```sh 
 # NPM
-npm i --save most-virtual-scheduler
+npm i --save most-pulsing-scheduler
+
 # Yarn
-yarn add most-virtual-scheduler
+yarn add most-pulsing-scheduler
 ```
 
 ## Usage
 
 ```js
-import { createVirtualScheduler } from 'most-virtual-scheduler'
+import { createPulsingScheduler } from 'most-pulsing-scheduler'
 
-// Construct our VirtualTimer-Scheduler pair
-const [timer, scheduler] = createVirtualScheduler()
+// Construct our PulsingTimer-Scheduler pair
+const [timer, scheduler] = createPulsingScheduler()
 
 // Construct a stream
-const stream = ... 
+const stream = ...
 
 // Run your stream
 runEffects(stream, scheduler)
 
-// Manually "progress" time by 100 milliseconds
-// All tasks scheduled to be run between 0 and 100 will be run
-// in the order they were scheduled.
-timer.progressTimeBy(100)
+// Manually "pulse" time by 100 units // All tasks scheduled to be run between 0 and 100 will be run // in the order they were scheduled.
+timer.pulse(100)
 ```

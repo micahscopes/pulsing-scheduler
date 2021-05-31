@@ -1,10 +1,10 @@
 export type Arity1<A, B> = (value: A) => B
 
 /**
- * VirtualTimeline is responsible for storing tasks at a given time and
+ * PulsingTimeline is responsible for storing tasks at a given time and
  * returns what tasks are ready at the current time. Internal to this implementation.
  */
-export class VirtualTimeline {
+export class PulsingTimeline {
   private tasks: Map<number, Arity1<number, any>[]> = new Map()
 
   public addTask = (time: number, f: Arity1<number, any>) => {

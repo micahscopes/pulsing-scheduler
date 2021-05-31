@@ -1,7 +1,7 @@
 {
-  "name": "most-virtual-scheduler",
+  "name": "most-pulsing-scheduler",
   "version": "1.0.0",
-  "description": "A virtual scheduler for @most/core",
+  "description": "A tempo based scheduler for @most/core",
   "main": "lib/index.js",
   "module": "esm/index.js",
   "types": "lib/index.d.ts",
@@ -20,25 +20,28 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mostjs-community/virtual-scheduler.git"
+    "url": "git+https://github.com/micahscopes/pulsing-scheduler.git"
   },
   "keywords": [
     "most",
     "@most/core",
     "mostjs",
     "scheduler",
-    "virtual scheduler"
+    "midi",
+    "tempo",
+    "sequencing"
   ],
-  "author": "Tylor Steinberger <tlsteinberger167@gmail.com>",
+  "author": "micahscopes@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mostjs-community/virtual-scheduler/issues"
+    "url": "https://github.com/micahscopes/pulsing-scheduler/issues"
   },
-  "homepage": "https://github.com/mostjs-community/virtual-scheduler#readme",
+  "homepage": "https://github.com/micahscopes/pulsing-scheduler#readme",
   "dependencies": {
     "@most/disposable": "^1.3.0",
     "@most/scheduler": "^1.3.0",
-    "@most/types": "^1.1.0"
+    "@most/types": "^1.1.0",
+    "wa-metro": "^1.1.2"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.0",

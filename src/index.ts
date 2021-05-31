@@ -1,3 +1,3 @@
-export * from './createVirtualScheduler'
-export * from './VirtualClock'
-export * from './VirtualTimer'
+export * from './createPulsingScheduler'
+export * from './PulsingClock'
+export * from './PulsingTimer'
