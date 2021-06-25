@@ -38,11 +38,11 @@ jspm_packages
 
 # generated files
 /build
-/dist
-/esm
-/cjs
-/umd
-/lib
+# /dist
+# /esm
+# /cjs
+# /umd
+# /lib
 .tmp
 .cache-loader
 
