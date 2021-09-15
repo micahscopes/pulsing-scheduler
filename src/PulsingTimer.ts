@@ -1,4 +1,4 @@
-import { Disposable, Handle, Timer } from '@most/types'
+import { Disposable, Handle, Time, Timer } from '@most/types'
 
 import { Arity1, PulsingTimeline } from './internal'
 import { createPulsingClock, PulsingClock } from './PulsingClock'
@@ -10,10 +10,7 @@ import { createPulsingClock, PulsingClock } from './PulsingClock'
  */
 export interface PulsingTimer extends Timer, PulsingClock, Disposable {}
 
-export function createPulsingTimer(
-  clock: PulsingClock = createPulsingClock(),
-  defaultDuration: number = 1,
-): PulsingTimer {
+export function createPulsingTimer(clock: PulsingClock = createPulsingClock(), unitPulse = 1): PulsingTimer {
   const timeline = new PulsingTimeline()
 
   function delay(delayPulsings: number, f: Arity1<number, any>): Disposable {
@@ -61,10 +58,13 @@ export function createPulsingTimer(
     setTimer,
     clearTimer,
     dispose,
-    pulse: (duration: number = defaultDuration) => {
-      const time = clock.pulse(duration)
-
-      runTasks()
+    pulse: (duration: Time = unitPulse) => {
+      let time = clock.now()
+      // advance time by `unitPulse` until the given duration has passed
+      for (let i = 0; i < duration; i += unitPulse) {
+        time = clock.pulse(unitPulse)
+        runTasks()
+      }
 
       return time
     },

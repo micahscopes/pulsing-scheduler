@@ -1,6 +1,6 @@
 {
   "name": "most-pulsing-scheduler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A tempo based scheduler for @most/core",
   "main": "lib/index.js",
   "module": "esm/index.js",

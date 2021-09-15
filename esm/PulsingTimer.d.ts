@@ -7,5 +7,5 @@ import { PulsingClock } from './PulsingClock'
  * in the event you would like to remove all tasks previously scheduled.
  */
 export interface PulsingTimer extends Timer, PulsingClock, Disposable {}
-export declare function createPulsingTimer(clock?: PulsingClock, defaultDuration?: number): PulsingTimer
+export declare function createPulsingTimer(clock?: PulsingClock, unitPulse?: number): PulsingTimer
 //# sourceMappingURL=PulsingTimer.d.ts.map

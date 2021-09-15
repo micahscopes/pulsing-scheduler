@@ -1,6 +1,6 @@
 import { PulsingTimeline } from './internal';
 import { createPulsingClock } from './PulsingClock';
-export function createPulsingTimer(clock = createPulsingClock(), defaultDuration = 1) {
+export function createPulsingTimer(clock = createPulsingClock(), unitPulse = 1) {
     const timeline = new PulsingTimeline();
     function delay(delayPulsings, f) {
         const time = clock.now() + delayPulsings;
@@ -35,9 +35,13 @@ export function createPulsingTimer(clock = createPulsingClock(), defaultDuration
         setTimer,
         clearTimer,
         dispose,
-        pulse: (duration = defaultDuration) => {
-            const time = clock.pulse(duration);
-            runTasks();
+        pulse: (duration = unitPulse) => {
+            let time = clock.now();
+            // advance time by `unitPulse` until the given duration has passed
+            for (let i = 0; i < duration; i += unitPulse) {
+                time = clock.pulse(unitPulse);
+                runTasks();
+            }
             return time;
         },
     };

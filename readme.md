@@ -27,6 +27,8 @@ const stream = ...
 // Run your stream
 runEffects(stream, scheduler)
 
-// Manually "pulse" time by 100 units // All tasks scheduled to be run between 0 and 100 will be run // in the order they were scheduled.
+// Manually "pulse" time by 100 units
+// All tasks scheduled to be run between 0 and 100 will be run
+// in the order they were scheduled.
 timer.pulse(100)
 ```
