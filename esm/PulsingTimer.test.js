@@ -1,9 +1,9 @@
 import { deepStrictEqual } from 'assert';
-import { createPulsingTimer } from './PulsingTimer';
+import { PulsingTimer } from './PulsingTimer';
 describe('PulsingTimer', () => {
     describe('given a PulsingTimer', () => {
         it('allows running tasks when they are ready', () => {
-            const timer = createPulsingTimer();
+            const timer = new PulsingTimer();
             const BEAT = 96; // 96 ticks per beat
             let a = false;
             timer.setTimer(() => (a = true), BEAT / 4);

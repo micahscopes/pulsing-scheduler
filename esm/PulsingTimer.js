@@ -1,49 +1,30 @@
-import { PulsingTimeline } from './internal';
+import { ProgressingTimeline, ProgressingTimer } from './progressing';
 import { createPulsingClock } from './PulsingClock';
-export function createPulsingTimer(clock = createPulsingClock(), unitPulse = 1) {
-    const timeline = new PulsingTimeline();
-    function delay(delayPulsings, f) {
-        const time = clock.now() + delayPulsings;
-        timeline.addTask(time, f);
-        return { dispose: () => timeline.removeTask(time, f) };
+/**
+ * PulsingTimer is an extension of @most/core's built-in Timer that advances time in discrete increments
+ * of "pulses".
+ *
+ * Calling `pulse` will increment the timer one pulse at a time for the given number of pulses, running
+ * any tasks scheduled along the way, along with previously scheduled tasks that haven't been run yet.
+ *
+ * It implements a Disposable instance in the event you would like to remove all tasks previously scheduled.
+ */
+export class PulsingTimer extends ProgressingTimer {
+    constructor(clock = createPulsingClock(), unitPulse = 1) {
+        super();
+        this.unitPulse = unitPulse;
+        this.clock = clock;
+        this.timeline = new ProgressingTimeline();
     }
-    function runTasks() {
-        const currentTime = clock.now();
-        const tasks = timeline.readyTasks(currentTime);
-        tasks.forEach((task) => task(currentTime));
+    // advances the timer by a given number of discrete pulses
+    pulse(pulses = this.unitPulse) {
+        let time = this.clock.now();
+        // advance time by `unitPulse` until the given duration has passed
+        for (let i = 0; i < pulses; i += this.unitPulse) {
+            time = this.clock.pulse(this.unitPulse);
+            this.runTasks();
+        }
+        return time;
     }
-    let id = 0;
-    const disposables = new Map();
-    function setTimer(f, delayPulsings) {
-        const handle = id++;
-        disposables.set(handle, delay(delayPulsings, () => {
-            disposables.delete(handle);
-            f();
-        }));
-        return handle;
-    }
-    function clearTimer(handle) {
-        var _a;
-        (_a = disposables.get(handle)) === null || _a === void 0 ? void 0 : _a.dispose();
-    }
-    function dispose() {
-        disposables.forEach((d) => d.dispose());
-        disposables.clear();
-    }
-    return {
-        ...clock,
-        setTimer,
-        clearTimer,
-        dispose,
-        pulse: (duration = unitPulse) => {
-            let time = clock.now();
-            // advance time by `unitPulse` until the given duration has passed
-            for (let i = 0; i < duration; i += unitPulse) {
-                time = clock.pulse(unitPulse);
-                runTasks();
-            }
-            return time;
-        },
-    };
 }
 //# sourceMappingURL=PulsingTimer.js.map

@@ -1,11 +1,21 @@
-import { Disposable, Timer } from '@most/types'
+import { Time } from '@most/types'
 
+import { ProgressingTimeline, ProgressingTimer } from './progressing'
 import { PulsingClock } from './PulsingClock'
 /**
- * A PulsingTimer is an extension of @most/core's built-in Timer, but when progressing time
- * it will run any tasks at or before the time progressed to. It implements a Disposable instance
- * in the event you would like to remove all tasks previously scheduled.
+ * PulsingTimer is an extension of @most/core's built-in Timer that advances time in discrete increments
+ * of "pulses".
+ *
+ * Calling `pulse` will increment the timer one pulse at a time for the given number of pulses, running
+ * any tasks scheduled along the way, along with previously scheduled tasks that haven't been run yet.
+ *
+ * It implements a Disposable instance in the event you would like to remove all tasks previously scheduled.
  */
-export interface PulsingTimer extends Timer, PulsingClock, Disposable {}
-export declare function createPulsingTimer(clock?: PulsingClock, unitPulse?: number): PulsingTimer
+export declare class PulsingTimer extends ProgressingTimer {
+  protected clock: PulsingClock
+  protected unitPulse: number
+  readonly timeline: ProgressingTimeline
+  constructor(clock?: PulsingClock, unitPulse?: number)
+  pulse(pulses?: Time): number
+}
 //# sourceMappingURL=PulsingTimer.d.ts.map
